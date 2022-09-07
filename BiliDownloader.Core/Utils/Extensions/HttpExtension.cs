@@ -29,7 +29,7 @@ namespace BiliDownloader.Core.Utils.Extensions
             {
                 request.Headers.Add("referer", "https://www.bilibili.com");
             }
-            return await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            return await httpClient.SendAsync(request,cancellationToken);
         }
 
         public static async ValueTask<long?> TryGetContentLengthAsync(this HttpClient httpClient,string requestUri,
