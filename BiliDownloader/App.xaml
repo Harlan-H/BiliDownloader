@@ -1,0 +1,39 @@
+﻿<Application x:Class="BiliDownloader.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:s="https://github.com/canton7/Stylet"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:BiliDownloader">
+    <Application.Resources>
+        <s:ApplicationLoader>
+            <s:ApplicationLoader.Bootstrapper>
+                <local:Bootstrapper/>
+            </s:ApplicationLoader.Bootstrapper>
+
+            <ResourceDictionary.MergedDictionaries>
+                <materialDesign:BundledTheme
+                    BaseTheme="Light"
+                    PrimaryColor="Blue"
+                    SecondaryColor="Blue" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Flipper.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <Color x:Key="SuccessColor">#006400</Color>
+            <Color x:Key="CanceledColor">#FF8C00</Color>
+            <Color x:Key="FailedColor">#8B0000</Color>
+
+            <SolidColorBrush x:Key="SuccessBrush" Color="{DynamicResource SuccessColor}" />
+            <SolidColorBrush x:Key="CanceledBrush" Color="{DynamicResource CanceledColor}" />
+            <SolidColorBrush x:Key="FailedBrush" Color="{DynamicResource FailedColor}" />
+
+            <Style x:Key="TextBlockStyle" TargetType="{x:Type TextBlock}">
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="HorizontalAlignment" Value="Right" />
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="Margin" Value="5" />
+            </Style>
+            
+        </s:ApplicationLoader>
+    </Application.Resources>
+</Application>

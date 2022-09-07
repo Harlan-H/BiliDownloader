@@ -1,0 +1,225 @@
+﻿<Window x:Class="BiliDownloader.Views.MainWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:s="https://github.com/canton7/Stylet"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:behavior="clr-namespace:BiliDownloader.Behaviors"
+        xmlns:local="clr-namespace:BiliDownloader.ViewModels"
+        xmlns:model ="clr-namespace:BiliDownloader.Models"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanMinimize"
+        d:DataContext="{d:DesignInstance local:MainWindowViewModel}" 
+        Height="700" Width="600">
+     
+    <materialDesign:DialogHost
+        CloseOnClickAway="False"
+        SnackbarMessageQueue="{Binding Snackbar}"
+        Style="{DynamicResource MaterialDesignEmbeddedDialogHost}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Margin="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox
+                Grid.Column="0" 
+                Margin="6"
+                FontSize="16"
+                
+                Text="{Binding RequestUrl,UpdateSourceTrigger=PropertyChanged,Delay=200}" materialDesign:HintAssist.Hint="视频地址"
+                materialDesign:TextFieldAssist.HasClearButton="True">
+                   <i:Interaction.Behaviors>
+                        <behavior:KeyDownBehavior />
+                    </i:Interaction.Behaviors>
+                </TextBox>
+                <Button Grid.Column="1"
+                    Command="{s:Action StartDownload}"
+                    Style="{DynamicResource MaterialDesignFlatButton}"
+                    IsDefault="True"
+                    Margin="0,6,6,6"
+                    Padding="4">
+                    <materialDesign:PackIcon
+                                Width="24"
+                                Height="24"
+                                Kind="ArrowDown" />
+                </Button>
+                <Button Grid.Column="2" 
+                        Padding="5"
+                        Cursor="Hand"
+                        IsTabStop="True"
+                        Command="{s:Action ShowSettings}"
+                        Style="{DynamicResource MaterialDesignFlatButton}" Foreground="{DynamicResource MaterialDesignDarkBackground}">
+                    <materialDesign:PackIcon
+                                Width="24"
+                                Height="24"
+                                Kind="Settings" />
+                </Button>
+            </Grid>
+            <Grid Grid.Row="1">
+                <ListView  ScrollViewer.HorizontalScrollBarVisibility="Disabled"  ItemsSource="{Binding Downloads}" Background="{DynamicResource MaterialDesignCardBackground}" >
+                    <ListView.Resources>
+                        <ContextMenu x:Key="ItemContextMenu">
+                            <MenuItem Header="复制标题" Command="{s:Action CopyTitle}"  CommandParameter="{Binding}" />
+                            <Separator />
+                            <MenuItem Header="取消所有下载" Command="{s:Action CancelAllDownloads}" />
+                            <Separator />
+                            <MenuItem Header="删除" Command="{s:Action RemoveDownload}"  CommandParameter="{Binding}" />
+                            <MenuItem Header="删除所有闲置下载" Command="{s:Action RemoveInactiveDownloads}" />
+                            <MenuItem Header="删除所有已完成记录" Command="{s:Action RemoveSuccessDownloads}" />
+                            <MenuItem Header="删除所有下载" Command="{s:Action RemoveAllDownloads}" />
+                            <Separator />
+                            <MenuItem Header="重新开始所有失败的下载"  Command="{s:Action RestartFailedDownloads}"/>
+                        </ContextMenu>
+                    </ListView.Resources>
+                    <ListView.ItemContainerStyle>
+                        <Style  TargetType="{x:Type ListViewItem}">
+                            <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn   Width="280"  DisplayMemberBinding="{Binding Title}"  Header="视频名称" />
+                            <GridViewColumn   Header="状态" Width="250" >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid Width="230">
+                                            <Grid Margin="2">
+                                                <Grid.Style>
+                                                    <Style TargetType="{x:Type Grid}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsDownloading}" Value="False">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition />
+                                                    <RowDefinition Height="auto" />
+                                                </Grid.RowDefinitions>
+                                                <Grid >
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="{Binding Filesize,FallbackValue=∞}" />
+                                                    <TextBlock Grid.Column="1" Text="{Binding Duration}" HorizontalAlignment="Center" />
+                                                    <TextBlock Grid.Column="2" Text="{Binding CurrentSpeed}" HorizontalAlignment="Right"/>
+                                                </Grid>
+                                                <ProgressBar Grid.Row="1" Height="3" Maximum="1" Minimum="0" Value="{Binding ProgressNum, Mode=OneWay}" >
+                                                    <ProgressBar.Style>
+                                                        <Style  BasedOn="{StaticResource MaterialDesignLinearProgressBar}" TargetType="{x:Type ProgressBar}">
+                                                            <Style.Triggers>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding Filesize.Bytes}" Value="0"/>
+                                                                        <Condition Binding="{Binding IsDownloading}" Value="true" />
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="IsIndeterminate" Value="True" />
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </ProgressBar.Style>
+                                                </ProgressBar>
+                                            </Grid>
+                                            <TextBlock 
+                                                VerticalAlignment="Center"
+                                                TextTrimming="CharacterEllipsis">
+                                                <TextBlock.Style>
+                                                    <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="{x:Type TextBlock}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Status}" Value="{x:Static model:DownloadStatus.Downloaded}" >
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+
+                                                           <!-- <MultiDataTrigger>
+                                                                <MultiDataTrigger.Conditions>
+                                                                    <Condition Binding="{Binding IsActive}" Value="True"/>
+                                                                    <Condition Binding="{Binding ProgressNum}" Value="0"/>
+                                                                </MultiDataTrigger.Conditions>
+                                                                <Setter Property="Text" Value="等待下载..." />
+                                                            </MultiDataTrigger> -->
+
+                                                            <DataTrigger Binding="{Binding Status}" Value="{x:Static model:DownloadStatus.Enqueued}" >
+                                                                <Setter Property="Text" Value="等待下载..." />
+                                                            </DataTrigger>
+
+                                                            <DataTrigger Binding="{Binding Status}" Value="{x:Static model:DownloadStatus.Completed}" >
+                                                                <Setter Property="Foreground" Value="{DynamicResource SuccessBrush}" />
+                                                                <Setter Property="Text" Value="✓ 完成" />
+                                                            </DataTrigger>
+
+                                                            <DataTrigger Binding="{Binding Status}" Value="{x:Static model:DownloadStatus.Canceled}" >
+                                                                <Setter Property="Foreground" Value="{DynamicResource CanceledBrush}" />
+                                                                <Setter Property="Text" Value="✗ 取消" />
+                                                            </DataTrigger>
+
+                                                            <DataTrigger Binding="{Binding Status}" Value="{x:Static model:DownloadStatus.Failed}" >
+                                                                <Setter Property="Foreground" Value="{DynamicResource FailedBrush}" />
+                                                                <Setter Property="Text" Value="✗ 错误" />
+                                                                <Setter Property="ToolTip" Value="{Binding FailReason}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </Grid>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel 
+                                        s:View.ActionTarget="{Binding}"
+                                        Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                            <!-- s:View.ActionTarget="{Binding}"这里使用binding等于绑定自身 因为OnCancel不在MainWindowViewModel上
+                                          所以这里让他绑定自身 也就等于绑定到了DownloadViewModel上然后
+                                        参考文档 https://docs.microsoft.com/en-us/dotnet/api/system.windows.data.binding.path?view=windowsdesktop-6.0
+                                            {Binding} ===> {Binding path=.}
+                                        -->
+
+                                            <Button Padding="4,0,0,0" VerticalAlignment="Center"  ToolTip="取消下载" 
+                                        Style="{DynamicResource MaterialDesignFlatButton}"
+                                        Command="{s:Action OnCancel}"
+                                        Visibility="{Binding CanOnCancel,Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
+                                                <materialDesign:PackIcon Width="24" Height="24" Kind="CloseCircleOutline" />
+                                            </Button>
+
+
+                                            <Button Padding="4,0,0,0"  VerticalAlignment="Center"  ToolTip="重新下载" 
+                                        Style="{DynamicResource MaterialDesignFlatButton}"
+                                        Command="{s:Action OnRestart}"
+                                        Visibility="{Binding CanOnRestart,Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
+                                                <materialDesign:PackIcon Width="24" Height="24" Kind="Restart" />
+                                            </Button>
+
+                                            <Button Padding="4,0,0,0" VerticalAlignment="Center"  ToolTip="显示文件所在目录" 
+                                        Style="{DynamicResource MaterialDesignFlatButton}"
+                                        Command="{s:Action OnShowFile}"
+                                        Visibility="{Binding CanOnShowFile,Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
+                                                <materialDesign:PackIcon Width="24" Height="24" Kind="FileFindOutline" />
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <materialDesign:Snackbar MessageQueue="{Binding Snackbar}" />
+            </Grid>
+        </Grid>
+    </materialDesign:DialogHost>
+</Window>
