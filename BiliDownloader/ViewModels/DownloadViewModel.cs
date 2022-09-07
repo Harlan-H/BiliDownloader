@@ -101,11 +101,8 @@ namespace BiliDownloader.ViewModels
                   {
                       soundsService.PlayError();
                       Status = DownloadStatus.Failed;
-#if DEBUG
                       FailReason = e.ToString();
-#else
-                      FailReason = e.Message;
-#endif
+
                   }
                   finally
                   {
