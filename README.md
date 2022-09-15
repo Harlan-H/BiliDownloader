@@ -21,5 +21,5 @@
 
 
 # 截图
-![list](https://github.com/Harlan-H/BiliDownloader/blob/master/.assets/1.png)
-![list](https://github.com/Harlan-H/BiliDownloader/blob/master/.assets/2.png)
+![1](https://user-images.githubusercontent.com/39378318/190370716-7810086c-7e4c-4c22-a555-5d9593e9b068.png)
+![2](https://user-images.githubusercontent.com/39378318/190370730-f8facf8c-61a2-41f1-84dd-b7ac6b4ade87.png)
