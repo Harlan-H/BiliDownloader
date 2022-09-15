@@ -62,4 +62,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+	
+    <Target Name="Delete Files" AfterTargets="Publish">
+	    <Message Text="Delete $(PublishDir)$(ProjectName).deps.json" Importance="high" />
+	    <Delete Files="$(PublishDir)$(ProjectName).deps.json" />
+    </Target>
 </Project>
