@@ -1,0 +1,74 @@
+name: main
+
+on: push
+
+jobs:
+  package:
+    runs-on: windows-latest
+
+    env:
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.100
+
+      - name: Publish
+        run: dotnet publish BiliDownloader/ -o BiliDownloader/bin/Publish --configuration Release
+
+      - name: Upload artifacts
+        if: ${{ github.event_name == 'push' && github.ref_type == 'tag' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: BiliDownloader
+          path: BiliDownloader/bin/Publish
+
+  deploy:
+    if: ${{ github.event_name == 'push' && github.ref_type == 'tag' }}
+    needs: package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: BiliDownloader
+          path: BiliDownloader
+
+      - name: Create package
+        run: Compress-Archive -Path BiliDownloader/* -DestinationPath BiliDownloader.zip -Force
+        shell: pwsh
+
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body: |
+            [Changelog](https://github.com/Harlan-H/BiliDownloader/blob/master/Changelog.md)
+          draft: false
+          prerelease: false
+
+      - name: Upload release asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_name: BiliDownloader.zip
+          asset_path: BiliDownloader.zip
+          asset_content_type: application/zip
+
+      - uses: geekyeggo/delete-artifact@v1
+        with:
+          name: BiliDownloader
