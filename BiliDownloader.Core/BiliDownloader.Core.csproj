@@ -8,6 +8,11 @@
     <FileVersion>1.0.2</FileVersion>
   </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    	<DebugSymbols>False</DebugSymbols>
+    	<DebugType>None</DebugType>
+    </PropertyGroup>
+	
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>

@@ -24,6 +24,23 @@
 	<GenerateBootstrapperOnBuild>true</GenerateBootstrapperOnBuild>
   </PropertyGroup>
 
+
+	<PropertyGroup Condition="'$(Configuration)'=='Release'">
+		<DebugSymbols>False</DebugSymbols>
+		<DebugType>None</DebugType>
+	</PropertyGroup>
+
+
+	<Target Name="Download FFmpeg before publish" BeforeTargets="PrepareForPublish">
+		<Exec Command="powershell -ExecutionPolicy Bypass -File &quot;$(ProjectDir)/DownloadFFmpeg.ps1&quot;" />
+		<Copy SourceFiles="$(ProjectDir)/ffmpeg.exe" DestinationFiles="$(PublishDir)/ffmpeg.exe" />
+	</Target>
+
+	<Target Name="Delete Files" AfterTargets="Publish">
+		<Message Text="Delete $(PublishDir)$(ProjectName).deps.json" Importance="high" />
+		<Delete Files="$(PublishDir)$(ProjectName).deps.json" />
+	</Target>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
@@ -46,13 +63,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BiliDownloader.Core\BiliDownloader.Core.csproj" />
+    <ProjectReference Include="..\SettingsManager\Settings.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="Settings">
-      <HintPath>..\..\M3u8Downloader_H\SettingsManager\bin\Release\netcoreapp3.1\Settings.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 
   <ItemGroup>
     <None Update="Sounds\error.wav">

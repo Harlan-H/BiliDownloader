@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.32126.315
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BiliDownloader.Core", "BiliDownloader.Core\BiliDownloader.Core.csproj", "{97B8E4D5-EAB7-43B2-9C0C-FB36D5BEADAC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BiliDownloader.Test", "BiliDownloader.Test\BiliDownloader.Test.csproj", "{D4932B76-4316-4A26-B68E-D16F0FFCC0A7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BiliDownloader", "BiliDownloader\BiliDownloader.csproj", "{B70B3FCF-6BD2-45BC-88FC-CBE0374D9626}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Settings", "SettingsManager\Settings.csproj", "{44100B88-1AA4-4E01-ADB6-16B754B487F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,14 @@ Global
 		{B70B3FCF-6BD2-45BC-88FC-CBE0374D9626}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B70B3FCF-6BD2-45BC-88FC-CBE0374D9626}.Release|x64.ActiveCfg = Release|x64
 		{B70B3FCF-6BD2-45BC-88FC-CBE0374D9626}.Release|x64.Build.0 = Release|x64
+		{44100B88-1AA4-4E01-ADB6-16B754B487F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44100B88-1AA4-4E01-ADB6-16B754B487F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44100B88-1AA4-4E01-ADB6-16B754B487F6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{44100B88-1AA4-4E01-ADB6-16B754B487F6}.Debug|x64.Build.0 = Debug|Any CPU
+		{44100B88-1AA4-4E01-ADB6-16B754B487F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44100B88-1AA4-4E01-ADB6-16B754B487F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44100B88-1AA4-4E01-ADB6-16B754B487F6}.Release|x64.ActiveCfg = Release|Any CPU
+		{44100B88-1AA4-4E01-ADB6-16B754B487F6}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
