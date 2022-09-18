@@ -23,6 +23,12 @@ namespace BiliDownloader.Core.Extractors
 
         private JsonElement? TryGetOwner() => Memory.Cache(this, () => TryGetVideoData()?.GetPropertyOrNull("owner"));
 
+        public int? TryGetAid() => Memory.Cache(this, () =>
+            TryGetVideoData()?
+            .GetPropertyOrNull("aid")?
+            .GetInt32OrNull()
+        );
+
         public string? TryGetVideoTitle() => Memory.Cache(this, () =>
             TryGetVideoData()?
             .GetPropertyOrNull("title")?
@@ -72,6 +78,16 @@ namespace BiliDownloader.Core.Extractors
             .SelectMany(p => p.TryGetEpisodes())
             .ToArray() ??
             Array.Empty<EpisodesExtractor>()
+        );
+
+        public IReadOnlyList<ClosedCaptionTraceInfoExtractor> TryGetCloseCaptionTraceInfo() => Memory.Cache(this, () =>
+            TryGetVideoData() ?
+            .GetPropertyOrNull("subtitle")?
+            .GetPropertyOrNull("list")?
+            .EnumerateArrayOrNull()?
+            .Select(i => new ClosedCaptionTraceInfoExtractor(i))
+            .ToArray()?? 
+            Array.Empty<ClosedCaptionTraceInfoExtractor>()
         );
     }
 

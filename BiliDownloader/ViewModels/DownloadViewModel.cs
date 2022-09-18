@@ -25,6 +25,7 @@ namespace BiliDownloader.ViewModels
         [DoNotNotify]
         public string FilePath { get; set; } = default!;
 
+
         public string Title { get; set; } = default!;
         public string CurrentSpeed { get; private set; } = default!;
         public TimeSpan Duration { get; private set; }
@@ -77,16 +78,6 @@ namespace BiliDownloader.ViewModels
 
                   try
                   {
-                      //                       streamInfos ??= await downloadService.GetDownloadOptions(Playlist, cancellationTokenSource.Token);
-                      // 
-                      //                       var streaminfo = streamInfos.First();
-                      //                       FileLength = streaminfo.FileSize;
-                      // 
-                      //                       _ = Task.Run(UpdateSpeedAndTime);
-                      // 
-                      //                       IsDownloading = true;
-                      //                       await downloadService.DownloadAsync(streaminfo, FilePath, UpdatePositionCallBack, cancellationTokenSource.Token);
-
                       Status = DownloadStatus.Enqueued;
                       await downloadService.DownloadAsync(Playlist, FilePath, RefreshSpeedAndTime, cancellationTokenSource.Token);
 
@@ -152,13 +143,12 @@ namespace BiliDownloader.ViewModels
 
     public static class DownloadViewModelExtensions
     {
-        public static DownloadViewModel CreateDownloadViewModel(this IViewModelFactory viewModelFactory, IPlaylist playlist,string filePath)
+        public static DownloadViewModel CreateDownloadViewModel(this IViewModelFactory viewModelFactory, IPlaylist playlist,string filePath,bool isDownloadSubtitle)
         {
             var view = viewModelFactory.CreateDownloadViewModel();
             view.Playlist = playlist;
             view.Title = playlist.Title!;
             view.FilePath = filePath;
-
             return view;
         }
     }

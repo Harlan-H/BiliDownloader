@@ -1,4 +1,5 @@
-﻿using BiliDownloader.Core.Common;
+﻿using BiliDownloader.Core.ClosedCaptions;
+using BiliDownloader.Core.Common;
 using BiliDownloader.Core.Videos.Pages;
 using System;
 using System.Collections.Generic;

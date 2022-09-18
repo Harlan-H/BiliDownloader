@@ -23,6 +23,7 @@
             <RowDefinition  Height="auto"/>
             <RowDefinition  Height="auto"/>
             <RowDefinition  />
+            <RowDefinition  />
             <RowDefinition  Height="auto"/>
             <RowDefinition  Height="auto"/>
             <RowDefinition  />
@@ -51,13 +52,16 @@
         <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource TextBlockStyle}"  Text="跳过已存在文件:"/>
         <ToggleButton  Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left"  Margin="10 0 0 0" Style="{StaticResource MaterialDesignSwitchToggleButton}"  ToolTip="{Binding ShouldSkipExistingFiles,Converter={x:Static converters:BoolToSkipStringConverters.Instance}}" IsChecked="{Binding ShouldSkipExistingFiles}" />
 
-        <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource TextBlockStyle}"  Text="文件后缀名"/>
-        <ComboBox Grid.Row="4" Grid.Column="1"  IsEnabled="False"
+        <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource TextBlockStyle}"  Text="自动下载字幕:"/>
+        <ToggleButton  Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left"  Margin="10 0 0 0" Style="{StaticResource MaterialDesignSwitchToggleButton}"  ToolTip="{Binding DownloadSubtitle,Converter={x:Static converters:BoolToSkipStringConverters.Instance}}" IsChecked="{Binding DownloadSubtitle}" />
+        
+        <TextBlock Grid.Row="5" Grid.Column="0" Style="{StaticResource TextBlockStyle}"  Text="文件后缀名"/>
+        <ComboBox Grid.Row="5" Grid.Column="1"  IsEnabled="False"
                   ItemsSource="{Binding DataContext.AvailableFormats,RelativeSource={RelativeSource AncestorType=UserControl}}" 
                   SelectedValue="mp4"
                   IsReadOnly="true" FontSize="19" />
 
-        <StackPanel Margin="8" Orientation="Horizontal" Grid.Row="5" Grid.ColumnSpan="3" HorizontalAlignment="Center">
+        <StackPanel Margin="8" Orientation="Horizontal" Grid.Row="6" Grid.ColumnSpan="3" HorizontalAlignment="Center">
             <Button Command="{s:Action OnSubmitSettingInfo}"  
                     CommandParameter="{Binding ElementName=SettingGrid,Path=DataContext}"
                     IsDefault="True"

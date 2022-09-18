@@ -1,4 +1,5 @@
-﻿using BiliDownloader.Core.Common;
+﻿using BiliDownloader.Core.ClosedCaptions;
+using BiliDownloader.Core.Common;
 using BiliDownloader.Core.Videos;
 using BiliDownloader.Core.Videos.Pages;
 using System;
@@ -19,6 +20,8 @@ namespace BiliDownloader.Core.Lives
         public string? Thumbnail { get; }
 
         public IList<IPlaylist> PlayLists { get; }
+
+        public ClosedCaptionManifest? ClosedCaptionManifest => throw new NotImplementedException();
 
         public LiveInfo(string title, string desc, Author? author, TimeSpan? timeSpan, string? thumb, IList<IPlaylist> playlists)
         {

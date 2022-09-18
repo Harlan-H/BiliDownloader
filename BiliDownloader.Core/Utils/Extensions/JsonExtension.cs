@@ -28,5 +28,8 @@ namespace BiliDownloader.Core.Utils.Extensions
 
         public static JsonElement.ArrayEnumerator? EnumerateArrayOrNull(this JsonElement element) =>
             element.ValueKind == JsonValueKind.Array ? element.EnumerateArray() : null;
+
+        public static double? GetDoubleOrNull(this JsonElement element) =>
+            element.ValueKind == JsonValueKind.Number && element.TryGetDouble(out var result) ? result : null;
     }
 }

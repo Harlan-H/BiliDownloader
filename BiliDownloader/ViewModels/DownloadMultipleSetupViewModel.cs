@@ -31,6 +31,8 @@ namespace BiliDownloader.ViewModels
         public IList<IPlaylist> AvailableVideos { get; set; } = Array.Empty<IPlaylist>();
         public IList<IPlaylist> SelectedVideos { get; set; } = Array.Empty<IPlaylist>();
 
+        //todo 增加checkbox  如果字幕数组大于0 则可用
+        //todo  当checkbox选中说明需要下载字幕
         public DownloadMultipleSetupViewModel(IViewModelFactory viewModelFactory, SettingsService settingsService)
         {
             this.viewModelFactory = viewModelFactory;
@@ -62,7 +64,7 @@ namespace BiliDownloader.ViewModels
 
                 PathEx.CreateDirectoryForFile(filePath);
 
-                var download = viewModelFactory.CreateDownloadViewModel(playlist, filePath);
+                var download = viewModelFactory.CreateDownloadViewModel(playlist, filePath,true);
                 downloads.Add(download);
             }
 

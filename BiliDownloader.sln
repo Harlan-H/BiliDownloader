@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BiliDownloader", "BiliDownl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Settings", "SettingsManager\Settings.csproj", "{44100B88-1AA4-4E01-ADB6-16B754B487F6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject1", "TestProject1\TestProject1.csproj", "{1534E29F-090E-41A7-A01C-BC1AA74BB6BD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,14 @@ Global
 		{44100B88-1AA4-4E01-ADB6-16B754B487F6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{44100B88-1AA4-4E01-ADB6-16B754B487F6}.Release|x64.ActiveCfg = Release|Any CPU
 		{44100B88-1AA4-4E01-ADB6-16B754B487F6}.Release|x64.Build.0 = Release|Any CPU
+		{1534E29F-090E-41A7-A01C-BC1AA74BB6BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1534E29F-090E-41A7-A01C-BC1AA74BB6BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1534E29F-090E-41A7-A01C-BC1AA74BB6BD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1534E29F-090E-41A7-A01C-BC1AA74BB6BD}.Debug|x64.Build.0 = Debug|Any CPU
+		{1534E29F-090E-41A7-A01C-BC1AA74BB6BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1534E29F-090E-41A7-A01C-BC1AA74BB6BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1534E29F-090E-41A7-A01C-BC1AA74BB6BD}.Release|x64.ActiveCfg = Release|Any CPU
+		{1534E29F-090E-41A7-A01C-BC1AA74BB6BD}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

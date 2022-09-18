@@ -1,9 +1,11 @@
 ﻿using BiliDownloader.Core;
+using BiliDownloader.Core.ClosedCaptions;
 using BiliDownloader.Core.Videos.Pages;
 using BiliDownloader.Core.Videos.Streams;
 using BiliDownloader.Utils;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -39,7 +41,7 @@ namespace BiliDownloader.Services
             }
         }
 
-        public async Task DownloadAsync(IPlaylist playlist, string filePath, Action<FileSize, ProgressManager> updateViewModel, CancellationToken cancellationToken = default)
+        public async Task DownloadAsync(IPlaylist playlist, string filePath,  Action<FileSize, ProgressManager> updateViewModel, CancellationToken cancellationToken = default)
         {
             await EnsureThrottlingAsync(cancellationToken);
 
@@ -55,6 +57,21 @@ namespace BiliDownloader.Services
                     using ProgressManager progressManager = new();
                     updateViewModel(streamInfo.Info.FileSize, progressManager);
                     await biliDownloaderClient.Videos.Streams.DownloadAsync(streamInfo.Info, streamInfo.FilePath, progressManager, cancellationToken);
+                }
+
+                if(settingsService.DownloadSubtitle)
+                {
+                    var closedCaptionResponse = await biliDownloaderClient.Videos.ClosedCaptions.GetClosedCaptionManifestAsync(playlist, cancellationToken);
+
+                    if(closedCaptionResponse.TrackInfos.Any())
+                    {
+                        var subtitles = new List<ClosedCaptionInput>(closedCaptionResponse.TrackInfos.Count);
+                        biliDownloaderClient.Videos.ClosedCaptions.PopulateSubtitleInputsAsync(closedCaptionResponse, filePath, subtitles);
+                        foreach (var subtitle in subtitles)
+                        {
+                            await biliDownloaderClient.Videos.ClosedCaptions.DownloadAsync(subtitle.TrackInfo, subtitle.FilePath, null, cancellationToken);
+                        }
+                    }
                 }
 
                 //ffmpeg合并文件

@@ -7,14 +7,12 @@ namespace BiliDownloader.Core.Videos.Pages
 {
     internal static class PlayListHelper
     {
-        private static PlayList GetPage(PagesExtractor pageExtractor, VideoId videoId)
-        {
-            var cid = pageExtractor.TryGetCid() ?? 0;
-            var title = pageExtractor.TryGetTitle();
-            var duration = pageExtractor.TryGetDuration() ?? TimeSpan.FromSeconds(0);
-            return new PlayList(videoId, cid, title, duration);
-        }
 
+        /// <summary>
+        /// 获取合集
+        /// </summary>
+        /// <param name="videoPageExtractor">主页数据</param>
+        /// <returns>视频流信息</returns>
         public static IList<IPlaylist> GetPlayLists(VideoPageExtractor videoPageExtractor)
         {
             var Episodes = videoPageExtractor.TryGetEpisodes();
@@ -25,17 +23,25 @@ namespace BiliDownloader.Core.Videos.Pages
             foreach (var e in Episodes)
             {
                 var id = e.TryGetBvid()!;
+                var aid = e.TryGetAid() ?? 0;
                 var cid = e.TryGetCid() ?? 0;
                 var title = e.TryGetTitle();
                 var duration = e.TryGetDuration() ?? TimeSpan.Zero;
 
-                var playlist = new PlayList(id, cid, title, duration);
+                var playlist = new PlayList(id,aid, cid, title, duration);
                 pages.Add(playlist);
             }
             return pages;
         }
 
-        public static IList<IPlaylist> GetPlayLists(VideoPageExtractor videoPageExtractor, VideoId videoId)
+
+        /// <summary>
+        /// 获取单集或多集
+        /// </summary>
+        /// <param name="videoPageExtractor">主页数据</param>
+        /// <param name="videoId">bvid</param>
+        /// <returns>视频流信息</returns>
+        public static IList<IPlaylist> GetPlayLists(VideoPageExtractor videoPageExtractor,int aid, VideoId videoId)
         {
             var pageExtractor = videoPageExtractor.TryGetPages();
             if (!pageExtractor.Any()) return Array.Empty<IPlaylist>();
@@ -43,8 +49,10 @@ namespace BiliDownloader.Core.Videos.Pages
             IList<IPlaylist> pages = new List<IPlaylist>();
             foreach (var p in pageExtractor)
             {
-                var pagetmp = GetPage(p, videoId);
-                pages.Add(pagetmp);
+                var cid = p.TryGetCid() ?? 0;
+                var title = p.TryGetTitle();
+                var duration = p.TryGetDuration() ?? TimeSpan.FromSeconds(0);
+                pages.Add(new PlayList(videoId, aid, cid, title, duration));
             }
             return pages;
         }

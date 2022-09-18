@@ -15,8 +15,9 @@ namespace BiliDownloader.Services
 #endif
         public bool ShouldSkipExistingFiles { get; set; } = true;
 
-     //   public string SelectedFormat { get; set; } = "mp4";
+        //   public string SelectedFormat { get; set; } = "mp4";
 
+        public bool DownloadSubtitle { get; set; }
         public string Cookies { get; set; } = string.Empty;
 
         public void ServiceUpdate(SettingsService oldSetting)

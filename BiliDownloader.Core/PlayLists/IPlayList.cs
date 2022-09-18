@@ -10,6 +10,7 @@ namespace BiliDownloader.Core.Videos.Pages
     public interface IPlaylist
     {
         string Url { get; }
+        string ClosedCaptionUrl { get; }
         string? Title { get; }
         TimeSpan? Duration { get; }
     }

@@ -10,6 +10,8 @@ namespace BiliDownloader.Core.Lives
         public string? Title { get; }
         public TimeSpan? Duration { get; }
 
+        public string ClosedCaptionUrl { get; } = default!;
+
         public LivePlayList(int cid, string? title = default, TimeSpan? timeSpan = default)
         {
             Cid = cid;

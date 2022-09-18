@@ -18,6 +18,13 @@ namespace BiliDownloader.Core.Extractors
             this.jsonElement = jsonElement;
         }
 
+
+        public int? TryGetAid() => Memory.Cache(this, () =>
+            jsonElement
+            .GetPropertyOrNull("aid")?
+            .GetInt32OrNull()
+        );
+
         public string? TryGetBvid() => Memory.Cache(this, () =>
              jsonElement
              .GetPropertyOrNull("bvid")?
