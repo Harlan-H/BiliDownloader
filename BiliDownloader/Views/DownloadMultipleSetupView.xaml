@@ -26,16 +26,17 @@
                    FontSize="19"
                    TextTrimming="CharacterEllipsis" ToolTip="{Binding Title}"/>
 
-        
-          <Image Grid.Row="1" Source="{Binding Thumbnail,TargetNullValue={x:Null}}" />
-          <!--  <TextBlock  Text="{Binding Duration}"
-                    Margin="0,0,8,6"
+        <Grid Grid.Row="1">
+          <Image  Source="{Binding Thumbnail,TargetNullValue={x:Null}}" />
+          <TextBlock  Text="{Binding Duration}"
+                    Margin="0,0,68,6"
                     Padding="2"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     Background="Black"
                     FontWeight="Light"
-                    Foreground="White"/>-->
+                    Foreground="White"/>
+        </Grid>
 
 
         <TextBlock Grid.Row="2" Height="46" Text="{Binding Description}" TextTrimming="CharacterEllipsis" Margin="8" ToolTip="{Binding Description}" />

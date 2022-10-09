@@ -22,7 +22,7 @@ namespace BiliDownloader.ViewModels
 
         public string? Author { get; set; }
 
-   //     public TimeSpan? Duration { get; set; }
+        public TimeSpan? Duration { get; set; }
 
         public string? Thumbnail { get; set; }
 
@@ -82,7 +82,7 @@ namespace BiliDownloader.ViewModels
             view.Title = video.Title;
             view.Description = video.Description;
             view.Author = video.Author?.ToString();
-      //      view.Duration = video.Duration;
+            view.Duration = video.Duration;
             view.Thumbnail = video.Thumbnail;
             view.AvailableVideos = video.PlayLists;
             view.VideoFormat = id is LiveId ? "flv" : "mp4";
