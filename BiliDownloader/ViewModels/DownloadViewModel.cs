@@ -122,11 +122,11 @@ namespace BiliDownloader.ViewModels
             if (!CanOnShowFile)
                 return;
 
+            if (string.IsNullOrWhiteSpace(FilePath))
+                return;
+
             try
             {
-                if (string.IsNullOrWhiteSpace(FilePath))
-                    return;
-
                 Process.Start("explorer", $"/select, \"{FilePath}\"");
             }
             catch (Exception)
@@ -143,7 +143,7 @@ namespace BiliDownloader.ViewModels
 
     public static class DownloadViewModelExtensions
     {
-        public static DownloadViewModel CreateDownloadViewModel(this IViewModelFactory viewModelFactory, IPlaylist playlist,string filePath,bool isDownloadSubtitle)
+        public static DownloadViewModel CreateDownloadViewModel(this IViewModelFactory viewModelFactory, IPlaylist playlist,string filePath)
         {
             var view = viewModelFactory.CreateDownloadViewModel();
             view.Playlist = playlist;
