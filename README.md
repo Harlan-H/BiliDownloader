@@ -1,6 +1,7 @@
 # BiliDownloader
 **BiliDownloader**是一款界面精简操作简单的b站视频下载工具。只需要输入b站视频的链接地址或者bv号即可实现下载。      
-首次运行如果提示安装 .net 请选择 .NET Desktop Runtime下载进行安装
+BiliDownloader.zip 为需要.net core的运行库的版本
+BiliDownloader-SingleFile.zip 不需要.net core运行库 但是win7一样需要安装KB4457144更新
 
 # 下载直播
  - 软件本身其实是支持直播下载的，但是因为本人做了另一款m3u8下载器所以给这个软件的直播功能给注释了，如果你需要也可以开启，但是直播下载会有一个问题，因为直播下载时flv格式的，那个是长连接的，一旦出现网络波动就会断开导致直播没有办法很好的下载完成，如果你使用本软件的下载功能，可以优化一下即可正常。
