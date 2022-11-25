@@ -31,7 +31,7 @@ namespace BiliDownloader.Services
 
         private double GetLargestWholeNumberValue()
         {
-            return Bytes >= 0x100000 ? MegaBytes : Bytes is >= 0x400 and < 0x100000 ? KiloBytes : KiloBytes;
+            return Bytes >= 0x100000 ? MegaBytes : Bytes is >= 0x400 and < 0x100000 ? KiloBytes : Bytes;
         }
 
         public string GetNext(long currentBytes)
