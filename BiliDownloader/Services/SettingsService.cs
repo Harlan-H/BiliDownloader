@@ -1,7 +1,9 @@
 ﻿using BiliDownloader.Utils;
 using BiliDownloader.Utils.Extensions;
 using Settings;
+#if !DEBUG
 using System.IO;
+#endif
 
 namespace BiliDownloader.Services
 {

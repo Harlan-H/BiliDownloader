@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Windows;
+#if !DEBUG
+using System.Windows.Threading;
+#endif
 
 namespace BiliDownloader
 {
