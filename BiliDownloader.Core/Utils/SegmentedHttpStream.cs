@@ -48,19 +48,19 @@ namespace BiliDownloader.Core.Utils
         }
 
         public async ValueTask PreloadAsync(CancellationToken cancellationToken = default) => await ResolveSegmentStreamAsync(cancellationToken);
-        public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+
+        public override async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
         {
             while (true)
             {
                 if (_actualPosition != Position)
                     ResetSegmentStream();
 
-                //这里必须干掉这个比较 不然会出现一个bug  在直播下载的时候 是没有长度的 也不知道长度 就应该一直保持连接 一直到中断
-                if (Length != 0 && Position >= Length)
+                if (Position >= Length)
                     return 0;
 
                 var stream = await ResolveSegmentStreamAsync(cancellationToken);
-                var bytesRead = await stream.ReadAsync(buffer, offset, count, cancellationToken);
+                var bytesRead = await stream.ReadAsync(buffer, cancellationToken);
                 _actualPosition = Position += bytesRead;
 
                 if (bytesRead != 0)
@@ -72,7 +72,7 @@ namespace BiliDownloader.Core.Utils
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            return ReadAsync(buffer, offset, count).GetAwaiter().GetResult();
+            throw new NotImplementedException();
         }
 
         public override long Seek(long offset, SeekOrigin origin)
@@ -85,7 +85,6 @@ namespace BiliDownloader.Core.Utils
                 _ => throw new ArgumentOutOfRangeException(nameof(origin))
             };
         }
-
 
         public override void Flush()
         {

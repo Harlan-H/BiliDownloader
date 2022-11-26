@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:s="https://github.com/canton7/Stylet"
              xmlns:local="clr-namespace:BiliDownloader.ViewModels"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=local:MessageBoxViewModel}"
@@ -36,14 +35,14 @@
         <StackPanel  Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button
                 Margin="8"   
-                Command="{s:Action Confirm}"
+                x:Name="Confirm"
                 Content="{Binding ConfirmBtnText}"
                 IsDefault="True"
                 Style="{DynamicResource MaterialDesignFlatButton}" />
 
             <Button
                 Margin="8"
-                Command="{s:Action Cancel}"
+                x:Name="Cancel"
                 Content="{Binding CancelBtnText}"
                 IsCancel="True"
                 Style="{DynamicResource MaterialDesignFlatButton}" />

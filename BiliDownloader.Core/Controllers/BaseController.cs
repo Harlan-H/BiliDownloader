@@ -17,12 +17,6 @@ namespace BiliDownloader.Core.Controllers
             HttpRequestMessage httpRequestMessage,
             CancellationToken cancellationToken = default)
         {
-//             if(!httpRequestMessage.Headers.Contains("User-Agent"))
-//             {
-//                 httpRequestMessage.Headers.Add("User-Agent",
-//                     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36");
-//             }
-
             using var response = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
             if(!response.IsSuccessStatusCode)
             {

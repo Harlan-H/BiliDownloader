@@ -4,10 +4,11 @@ using BiliDownloader.Models;
 using BiliDownloader.Services;
 using BiliDownloader.Utils.Extensions;
 using BiliDownloader.ViewModels.Dialogs;
+using Caliburn.Micro;
 using MaterialDesignThemes.Wpf;
-using Stylet;
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -15,9 +16,7 @@ namespace BiliDownloader.ViewModels
 {
     public class MainWindowViewModel : Screen
     {
-        private readonly IViewModelFactory viewModelFactory;
         private readonly QueryService queryService;
-        private readonly DialogManager dialogManager;
         private readonly SettingsService settingsService;
 
         public ISnackbarMessageQueue Snackbar { get; } = new SnackbarMessageQueue(TimeSpan.FromSeconds(5));
@@ -25,34 +24,31 @@ namespace BiliDownloader.ViewModels
         public string? RequestUrl { get; set; }
         public bool IsBusy { get; private set; }
 
-        public MainWindowViewModel(IViewModelFactory viewModelFactory, QueryService queryService,
-            DialogManager dialogManager,
-            SettingsService settingsService)
+        public MainWindowViewModel(QueryService queryService, SettingsService settingsService)
         {
-            this.viewModelFactory = viewModelFactory;
             this.queryService = queryService;
-            this.dialogManager = dialogManager;
             this.settingsService = settingsService;
         }
 
-        protected override void OnViewLoaded()
-        {
-            base.OnViewLoaded();
 
+        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+        {
             DisplayName = $"b站视频下载器 v{App.VersionString} by:Harlan";
 
             settingsService.Load();
             settingsService.ServiceUpdate();
+
+            return base.OnInitializeAsync(cancellationToken);
         }
 
-        protected override void OnClose()
+        public override Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
         {
-            base.OnClose();
-
             settingsService.Save();
+            return base.CanCloseAsync(cancellationToken);
         }
 
-        private async Task<IVideo> FilterVideoPlaylist(QueryModel queryModel)
+
+        private static async Task<IVideo> FilterVideoPlaylist(QueryModel queryModel)
         {
             if (queryModel.Id is not VideoId videoId)
                 return queryModel.Value;
@@ -60,8 +56,8 @@ namespace BiliDownloader.ViewModels
             var video = queryModel.Value;
             if(video.IsVideoCollection(videoId))
             {
-                var view = viewModelFactory.CreateMessageBoxViewModel("注意", "当前视频包含合集,是否展示合集所有内容", "是", "否");
-                var ret = await dialogManager.ShowDialogAsync(view);
+                var view = MessageBoxViewModel.CreateMessageBoxViewModel("注意", "当前视频包含合集,是否展示合集所有内容", "是", "否");
+                var ret = await DialogManager.ShowDialogAsync(view);
                 return ret ? queryModel.Value : video.GetSingleVideoPlayListFromVideoCollection(videoId);
             }
             return queryModel.Value;
@@ -90,10 +86,10 @@ namespace BiliDownloader.ViewModels
                 QueryModel query = await queryService.ParseQuery(RequestUrl);
                 // await urlService.ParseQuery(new FileInfo(@"E:\desktop\bilibili\网页源码\6.html"), "BV3212624");
                 var video = await FilterVideoPlaylist(query);
-                var view = viewModelFactory.CreateDownloadMultipleSetupViewModel(video,query.Id);
+                var view = DownloadMultipleSetupViewModel.CreateDownloadMultipleSetupViewModel(video);
                 view.SelectedVideos = view.AvailableVideos;
 
-                var downloads = await dialogManager.ShowDialogAsync(view);
+                var downloads = await DialogManager.ShowDialogAsync(view);
                 if (downloads is null)
                     return;
 
@@ -121,8 +117,7 @@ namespace BiliDownloader.ViewModels
 
         public async void RemoveAllDownloads()
         {
-            var dialog = viewModelFactory.CreateMessageBoxViewModel("注意", "是否要删除所有下载?");
-            var result = await dialogManager.ShowDialogAsync(dialog);
+            var result = await MessageBoxViewModel.ShowMessageBox("注意", "是否要删除所有下载?");
             if (result == false) return;
 
             foreach (var download in Downloads.ToArray())
@@ -163,8 +158,8 @@ namespace BiliDownloader.ViewModels
 
         public async void ShowSettings()
         {
-            var dialog = viewModelFactory.CreateSettingsViewModel();
-            await dialogManager.ShowDialogAsync(dialog);
+            var dialog = new SettingsViewModel(settingsService);
+            await DialogManager.ShowDialogAsync(dialog);
         }
     }
 }

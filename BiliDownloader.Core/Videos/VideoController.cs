@@ -28,20 +28,5 @@ namespace BiliDownloader.Core.Videos
             return videoExtractor;
         }
 
-
-        public static async ValueTask<VideoPageExtractor> GetVideoPageAsync(
-            FileInfo fileInfo)
-        {
-            if (!fileInfo.Exists)
-                return null!;
-
-            var raw = await fileInfo.OpenText().ReadToEndAsync();
-            var videoExtractor = VideoPageExtractor.TryCreate(raw);
-            if (videoExtractor == null)
-            {
-                throw new DownloaderException($"请求地址是无效的");
-            }
-            return videoExtractor;
-        }
     }
 }

@@ -38,11 +38,6 @@ namespace BiliDownloader.Core.Videos
             return VideoExtract(videoExtractor, videoId);
         }
 
-        public async ValueTask<Video> GetVideoInfoAsync(FileInfo fileInfo,VideoId videoId)
-        {
-            var videoExtractor = await VideoController.GetVideoPageAsync(fileInfo);
-            return VideoExtract(videoExtractor, videoId);
-        }
 
         private static Video VideoExtract(VideoPageExtractor videoExtractor, VideoId videoId)
         {

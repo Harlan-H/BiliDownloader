@@ -3,9 +3,8 @@ using BiliDownloader.Core.Videos.Streams;
 using BiliDownloader.Models;
 using BiliDownloader.Services;
 using BiliDownloader.Utils;
-using BiliDownloader.ViewModels.Dialogs;
+using Caliburn.Micro;
 using PropertyChanged;
-using Stylet;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -13,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BiliDownloader.ViewModels
 {
-    public class DownloadViewModel : PropertyChangedBase, IDisposable
+    public partial class DownloadViewModel : PropertyChangedBase, IDisposable
     {
         private CancellationTokenSource? cancellationTokenSource;
         private readonly DownloadService downloadService;
@@ -141,11 +140,11 @@ namespace BiliDownloader.ViewModels
         }
     }
 
-    public static class DownloadViewModelExtensions
+    public partial class DownloadViewModel
     {
-        public static DownloadViewModel CreateDownloadViewModel(this IViewModelFactory viewModelFactory, IPlaylist playlist,string filePath)
+        public static DownloadViewModel CreateDownloadViewModel(IPlaylist playlist,string filePath)
         {
-            var view = viewModelFactory.CreateDownloadViewModel();
+            var view = IoC.Get<DownloadViewModel>();
             view.Playlist = playlist;
             view.Title = playlist.Title!;
             view.FilePath = filePath;

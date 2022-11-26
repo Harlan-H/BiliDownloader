@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:s="https://github.com/canton7/Stylet"
+        xmlns:cal="http://caliburnmicro.com"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:behavior="clr-namespace:BiliDownloader.Behaviors"
@@ -43,7 +43,7 @@
                     </i:Interaction.Behaviors>
                 </TextBox>
                 <Button Grid.Column="1"
-                    Command="{s:Action StartDownload}"
+                    x:Name="StartDownload"
                     Style="{DynamicResource MaterialDesignFlatButton}"
                     IsDefault="True"
                     Margin="0,6,6,6"
@@ -57,7 +57,7 @@
                         Padding="5"
                         Cursor="Hand"
                         IsTabStop="True"
-                        Command="{s:Action ShowSettings}"
+                        x:Name="ShowSettings"
                         Style="{DynamicResource MaterialDesignFlatButton}" Foreground="{DynamicResource MaterialDesignDarkBackground}">
                     <materialDesign:PackIcon
                                 Width="24"
@@ -66,24 +66,27 @@
                 </Button>
             </Grid>
             <Grid Grid.Row="1">
-                <ListView  ScrollViewer.HorizontalScrollBarVisibility="Disabled"  ItemsSource="{Binding Downloads}" Background="{DynamicResource MaterialDesignCardBackground}" >
+                <ListView  ScrollViewer.HorizontalScrollBarVisibility="Disabled"  ItemsSource="{Binding Downloads}" Background="{DynamicResource MaterialDesignCardBackground}" d:ItemsSource="{d:SampleData ItemCount=5}" >
                     <ListView.Resources>
-                        <ContextMenu x:Key="ItemContextMenu">
-                            <MenuItem Header="复制标题" Command="{s:Action CopyTitle}"  CommandParameter="{Binding}" />
+                        <ContextMenu cal:Action.TargetWithoutContext="{Binding DataContext,RelativeSource={RelativeSource AncestorType=Window}}"  x:Key="ItemContextMenu">
+                            <MenuItem Header="复制标题" cal:Message.Attach="CopyTitle($DataContext)"/>
                             <Separator />
-                            <MenuItem Header="取消所有下载" Command="{s:Action CancelAllDownloads}" />
+                            <MenuItem Header="取消所有下载"  cal:Message.Attach="CancelAllDownloads" />
                             <Separator />
-                            <MenuItem Header="删除" Command="{s:Action RemoveDownload}"  CommandParameter="{Binding}" />
-                            <MenuItem Header="删除所有闲置下载" Command="{s:Action RemoveInactiveDownloads}" />
-                            <MenuItem Header="删除所有已完成记录" Command="{s:Action RemoveSuccessDownloads}" />
-                            <MenuItem Header="删除所有下载" Command="{s:Action RemoveAllDownloads}" />
+                            <MenuItem Header="删除"  cal:Message.Attach="RemoveDownload($DataContext)" />
+                            <MenuItem Header="删除所有闲置下载"  cal:Message.Attach="RemoveInactiveDownloads" />
+                            <MenuItem Header="删除所有已完成记录"  cal:Message.Attach="RemoveSuccessDownloads" />
+                            <MenuItem Header="删除所有下载"  cal:Message.Attach="RemoveAllDownloads" />
                             <Separator />
-                            <MenuItem Header="重新开始所有失败的下载"  Command="{s:Action RestartFailedDownloads}"/>
+                            <MenuItem Header="重新开始所有失败的下载"   cal:Message.Attach="RestartFailedDownloads"/>
                         </ContextMenu>
                     </ListView.Resources>
                     <ListView.ItemContainerStyle>
-                        <Style  TargetType="{x:Type ListViewItem}">
+                        <Style BasedOn="{StaticResource MaterialDesignGridViewItem}" TargetType="{x:Type ListViewItem}">
                             <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}"/>
+                            <Setter Property="Height" Value="40" />
+                            <Setter Property="VerticalContentAlignment" Value="Center" />
+                            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                         </Style>
                     </ListView.ItemContainerStyle>
                     <ListView.View>
@@ -143,14 +146,6 @@
                                                                 <Setter Property="Visibility" Value="Collapsed" />
                                                             </DataTrigger>
 
-                                                           <!-- <MultiDataTrigger>
-                                                                <MultiDataTrigger.Conditions>
-                                                                    <Condition Binding="{Binding IsActive}" Value="True"/>
-                                                                    <Condition Binding="{Binding ProgressNum}" Value="0"/>
-                                                                </MultiDataTrigger.Conditions>
-                                                                <Setter Property="Text" Value="等待下载..." />
-                                                            </MultiDataTrigger> -->
-
                                                             <DataTrigger Binding="{Binding Status}" Value="{x:Static model:DownloadStatus.Enqueued}" >
                                                                 <Setter Property="Text" Value="等待下载..." />
                                                             </DataTrigger>
@@ -162,7 +157,7 @@
 
                                                             <DataTrigger Binding="{Binding Status}" Value="{x:Static model:DownloadStatus.Canceled}" >
                                                                 <Setter Property="Foreground" Value="{DynamicResource CanceledBrush}" />
-                                                                <Setter Property="Text" Value="✗ 取消" />
+                                                                <Setter Property="Text" Value="⏹ 停止" />
                                                             </DataTrigger>
 
                                                             <DataTrigger Binding="{Binding Status}" Value="{x:Static model:DownloadStatus.Failed}" >
@@ -181,34 +176,28 @@
                             <GridViewColumn >
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <StackPanel 
-                                        s:View.ActionTarget="{Binding}"
+                                        <StackPanel cal:Bind.ModelWithoutContext="{Binding}"
                                         Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                                            <!-- s:View.ActionTarget="{Binding}"这里使用binding等于绑定自身 因为OnCancel不在MainWindowViewModel上
-                                          所以这里让他绑定自身 也就等于绑定到了DownloadViewModel上然后
-                                        参考文档 https://docs.microsoft.com/en-us/dotnet/api/system.windows.data.binding.path?view=windowsdesktop-6.0
-                                            {Binding} ===> {Binding path=.}
-                                        -->
 
-                                            <Button Padding="4,0,0,0" VerticalAlignment="Center"  ToolTip="取消下载" 
+                                            <Button Padding="4,0,0,0" VerticalAlignment="Center"  ToolTip="停止下载" 
                                         Style="{DynamicResource MaterialDesignFlatButton}"
-                                        Command="{s:Action OnCancel}"
-                                        Visibility="{Binding CanOnCancel,Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
-                                                <materialDesign:PackIcon Width="24" Height="24" Kind="CloseCircleOutline" />
+                                        x:Name="OnCancel"
+                                        Visibility="{Binding CanOnCancel,Converter={StaticResource booltovis}}">
+                                                <materialDesign:PackIcon Width="24" Height="24" Kind="StopCircleOutline" />
                                             </Button>
 
 
                                             <Button Padding="4,0,0,0"  VerticalAlignment="Center"  ToolTip="重新下载" 
                                         Style="{DynamicResource MaterialDesignFlatButton}"
-                                        Command="{s:Action OnRestart}"
-                                        Visibility="{Binding CanOnRestart,Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
+                                        x:Name="OnRestart"
+                                        Visibility="{Binding CanOnRestart,Converter={StaticResource booltovis}}">
                                                 <materialDesign:PackIcon Width="24" Height="24" Kind="Restart" />
                                             </Button>
 
                                             <Button Padding="4,0,0,0" VerticalAlignment="Center"  ToolTip="显示文件所在目录" 
                                         Style="{DynamicResource MaterialDesignFlatButton}"
-                                        Command="{s:Action OnShowFile}"
-                                        Visibility="{Binding CanOnShowFile,Converter={x:Static s:BoolToVisibilityConverter.Instance}}">
+                                        x:Name="OnShowFile"
+                                        Visibility="{Binding CanOnShowFile,Converter={StaticResource booltovis}}">
                                                 <materialDesign:PackIcon Width="24" Height="24" Kind="FileFindOutline" />
                                             </Button>
                                         </StackPanel>

@@ -1,9 +1,9 @@
-﻿using BiliDownloader.Core.Lives;
-using BiliDownloader.Core.Videos;
+﻿using BiliDownloader.Core.Videos;
 using BiliDownloader.Core.Videos.Pages;
 using BiliDownloader.Services;
 using BiliDownloader.Utils;
 using BiliDownloader.ViewModels.Dialogs;
+using Caliburn.Micro;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,9 +11,8 @@ using System.Linq;
 
 namespace BiliDownloader.ViewModels
 {
-    public class DownloadMultipleSetupViewModel : DialogScreen<IReadOnlyList<DownloadViewModel>>
+    public partial class DownloadMultipleSetupViewModel : DialogScreen<IReadOnlyList<DownloadViewModel>>
     {
-        private readonly IViewModelFactory viewModelFactory;
         private readonly SettingsService settingsService;
 
         public string Title { get; set; } = default!;
@@ -31,9 +30,8 @@ namespace BiliDownloader.ViewModels
         public IList<IPlaylist> AvailableVideos { get; set; } = Array.Empty<IPlaylist>();
         public IList<IPlaylist> SelectedVideos { get; set; } = Array.Empty<IPlaylist>();
 
-        public DownloadMultipleSetupViewModel(IViewModelFactory viewModelFactory, SettingsService settingsService)
+        public DownloadMultipleSetupViewModel(SettingsService settingsService)
         {
-            this.viewModelFactory = viewModelFactory;
             this.settingsService = settingsService;
         }
 
@@ -62,7 +60,7 @@ namespace BiliDownloader.ViewModels
 
                 PathEx.CreateDirectoryForFile(filePath);
 
-                var download = viewModelFactory.CreateDownloadViewModel(playlist, filePath);
+                var download = DownloadViewModel.CreateDownloadViewModel(playlist, filePath);
                 downloads.Add(download);
             }
 
@@ -72,18 +70,18 @@ namespace BiliDownloader.ViewModels
 
     }
 
-    public static class DownloadMultipleSetupViewModelExtensions
+    public partial class DownloadMultipleSetupViewModel
     {
-        public static DownloadMultipleSetupViewModel CreateDownloadMultipleSetupViewModel(this IViewModelFactory factory, IVideo video, object id)
+        public static DownloadMultipleSetupViewModel CreateDownloadMultipleSetupViewModel(IVideo video)
         {
-            var view = factory.CreateDownloadMultipleSetupViewModel();
+            var view = IoC.Get<DownloadMultipleSetupViewModel>();
             view.Title = video.Title;
             view.Description = video.Description;
             view.Author = video.Author?.ToString();
             view.Duration = video.Duration;
             view.Thumbnail = video.Thumbnail;
             view.AvailableVideos = video.PlayLists;
-            view.VideoFormat = id is LiveId ? "flv" : "mp4";
+            view.VideoFormat = "mp4";
             return view;
         }
     }

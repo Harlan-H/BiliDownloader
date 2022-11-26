@@ -6,8 +6,8 @@
              xmlns:local="clr-namespace:BiliDownloader.ViewModels"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             xmlns:s="https://github.com/canton7/Stylet"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:cal="http://caliburnmicro.com"
              xmlns:behavior="clr-namespace:BiliDownloader.Behaviors"
              xmlns:converters="clr-namespace:BiliDownloader.Converters"
              d:DataContext="{d:DesignInstance Type=local:SettingsViewModel}"
@@ -62,13 +62,12 @@
                   IsReadOnly="true" FontSize="19" />
 
         <StackPanel Margin="8" Orientation="Horizontal" Grid.Row="6" Grid.ColumnSpan="3" HorizontalAlignment="Center">
-            <Button Command="{s:Action OnSubmitSettingInfo}"  
-                    CommandParameter="{Binding ElementName=SettingGrid,Path=DataContext}"
+            <Button cal:Message.Attach="OnSubmitSettingInfo($DataContext)"
                     IsDefault="True"
                     Content="保存" 
                     Width="100" />
 
-            <Button  Command="{s:Action OnCloseDialog}"  
+            <Button  x:Name="OnCloseDialog"  
                      IsCancel="True"
                      Content="关闭"  Width="100" Margin="10 0 0 0" />
         </StackPanel>
