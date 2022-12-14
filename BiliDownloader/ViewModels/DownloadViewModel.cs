@@ -24,6 +24,7 @@ namespace BiliDownloader.ViewModels
         [DoNotNotify]
         public string FilePath { get; set; } = default!;
 
+        public string Title { get; set; } = default!;
 
         public DownloadRate DownloadRateSelf { get; set; } = default!;
 
