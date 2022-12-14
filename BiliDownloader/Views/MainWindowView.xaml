@@ -9,6 +9,7 @@
         xmlns:behavior="clr-namespace:BiliDownloader.Behaviors"
         xmlns:local="clr-namespace:BiliDownloader.ViewModels"
         xmlns:model ="clr-namespace:BiliDownloader.Models"
+        xmlns:converters="clr-namespace:BiliDownloader.Converters"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanMinimize"
@@ -116,25 +117,11 @@
                                                         <ColumnDefinition />
                                                         <ColumnDefinition />
                                                     </Grid.ColumnDefinitions>
-                                                    <TextBlock Text="{Binding Filesize,FallbackValue=∞}" />
-                                                    <TextBlock Grid.Column="1" Text="{Binding Duration}" HorizontalAlignment="Center" />
-                                                    <TextBlock Grid.Column="2" Text="{Binding CurrentSpeed}" HorizontalAlignment="Right"/>
+                                                    <TextBlock Text="{Binding DownloadRateSelf.FileSize,FallbackValue=∞}" />
+                                                    <TextBlock Grid.Column="1" Text="{Binding DownloadRateSelf.Duration}" HorizontalAlignment="Center" />
+                                                    <TextBlock Grid.Column="2" Text="{Binding DownloadRateSelf.CurrentRate,Converter={x:Static converters:LongToBitrateConverter.Instance}}" HorizontalAlignment="Right"/>
                                                 </Grid>
-                                                <ProgressBar Grid.Row="1" Height="3" Maximum="1" Minimum="0" Value="{Binding ProgressNum, Mode=OneWay}" >
-                                                    <ProgressBar.Style>
-                                                        <Style  BasedOn="{StaticResource MaterialDesignLinearProgressBar}" TargetType="{x:Type ProgressBar}">
-                                                            <Style.Triggers>
-                                                                <MultiDataTrigger>
-                                                                    <MultiDataTrigger.Conditions>
-                                                                        <Condition Binding="{Binding Filesize.Bytes}" Value="0"/>
-                                                                        <Condition Binding="{Binding IsDownloading}" Value="true" />
-                                                                    </MultiDataTrigger.Conditions>
-                                                                    <Setter Property="IsIndeterminate" Value="True" />
-                                                                </MultiDataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </ProgressBar.Style>
-                                                </ProgressBar>
+                                                <ProgressBar Grid.Row="1" Height="3" Maximum="1" Minimum="0" Value="{Binding DownloadRateSelf.ProgressNum, Mode=OneWay}" />
                                             </Grid>
                                             <TextBlock 
                                                 VerticalAlignment="Center"

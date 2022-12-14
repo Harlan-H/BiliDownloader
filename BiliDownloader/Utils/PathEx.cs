@@ -11,6 +11,7 @@ namespace BiliDownloader.Utils
     {
         public static string EscapeFileName(string fileName) =>
             Path.GetInvalidFileNameChars().Aggregate(fileName, (current, invalidChar) => current.Replace(invalidChar, '_'));
+
         public static string MakeUniqueFilePath(string baseFilePath, int maxAttempts = 100)
         {
             if (!File.Exists(baseFilePath))

@@ -5,7 +5,6 @@ using BiliDownloader.Core.Videos.Streams;
 using BiliDownloader.Utils;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -41,7 +40,7 @@ namespace BiliDownloader.Services
             }
         }
 
-        public async Task DownloadAsync(IPlaylist playlist, string filePath,  Action<FileSize, ProgressManager> updateViewModel, CancellationToken cancellationToken = default)
+        public async Task DownloadAsync(IPlaylist playlist, string filePath, Func<long,DownloadRate> func, CancellationToken cancellationToken = default)
         {
             await EnsureThrottlingAsync(cancellationToken);
 
@@ -54,9 +53,9 @@ namespace BiliDownloader.Services
 
                 foreach (var streamInfo in streamInfos)
                 {
-                    using ProgressManager progressManager = new();
-                    updateViewModel(streamInfo.Info.FileSize, progressManager);
-                    await biliDownloaderClient.Videos.Streams.DownloadAsync(streamInfo.Info, streamInfo.FilePath, progressManager, cancellationToken);
+                    using DownloadRate downloadrate = func(streamInfo.Info.FileSize);
+                    downloadrate.Run();
+                    await biliDownloaderClient.Videos.Streams.DownloadAsync(streamInfo.Info, streamInfo.FilePath, downloadrate, cancellationToken);
                 }
 
                 if(settingsService.DownloadSubtitle)

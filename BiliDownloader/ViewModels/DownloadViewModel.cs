@@ -25,11 +25,7 @@ namespace BiliDownloader.ViewModels
         public string FilePath { get; set; } = default!;
 
 
-        public string Title { get; set; } = default!;
-        public string CurrentSpeed { get; private set; } = default!;
-        public TimeSpan Duration { get; private set; }
-        public double ProgressNum { get; private set; }
-        public FileSize Filesize { get; private set; }
+        public DownloadRate DownloadRateSelf { get; set; } = default!;
 
         public bool IsActive { get; private set; }
         public DownloadStatus Status { get; set; }
@@ -43,25 +39,12 @@ namespace BiliDownloader.ViewModels
             this.soundsService = soundsService;
         }
 
-        private async void RefreshSpeedAndTime(FileSize filesize, ProgressManager progressManager)
+        private DownloadRate DownloadRateFunc(long filesize)
         {
-            Filesize = filesize;
             Status = DownloadStatus.Downloaded;
-
-            Speed speed = new();
-            DurationTime durationTime = new(filesize);
-            while (!progressManager.IsSuccessed)
-            {
-                CurrentSpeed = speed.GetNext(progressManager.Progress);
-                Duration = durationTime.GetNext(progressManager.Progress);
-
-                if (filesize > 0)
-                    ProgressNum = progressManager.Progress / (double)filesize;
-
-                await Task.Delay(1000);
-            }
-
+            return DownloadRateSelf = new DownloadRate(filesize); 
         }
+
 
         public bool CanOnStart => !IsActive;
         public void OnStart()
@@ -78,7 +61,8 @@ namespace BiliDownloader.ViewModels
                   try
                   {
                       Status = DownloadStatus.Enqueued;
-                      await downloadService.DownloadAsync(Playlist, FilePath, RefreshSpeedAndTime, cancellationTokenSource.Token);
+
+                      await downloadService.DownloadAsync(Playlist, FilePath, DownloadRateFunc, cancellationTokenSource.Token);
 
                       soundsService.PlaySuccess();
                       Status = DownloadStatus.Completed;
