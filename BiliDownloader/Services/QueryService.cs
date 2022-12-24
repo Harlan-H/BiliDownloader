@@ -21,7 +21,7 @@ namespace BiliDownloader.Services
                 return new QueryModel(videoId, video);
             }
 
-            throw new InvalidOperationException("不支持得请求地址");
+            throw new InvalidOperationException("不支持的请求地址");
         }
 
     }
