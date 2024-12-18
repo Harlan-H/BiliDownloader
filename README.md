@@ -1,8 +1,8 @@
 # BiliDownloader
 **BiliDownloader**是一款界面精简操作简单的b站视频下载工具。只需要输入b站视频的链接地址或者bv号即可实现下载。      
 软件分两个版本：
-  - BiliDownloader.zip 为需要.net core的运行库的版本
-  - BiliDownloader-SingleFile.zip 不需要.net core运行库 但是win7一样需要安装KB4457144更新
+  - BiliDownloader.zip 为需要.net 9的运行库的版本
+  - BiliDownloader-SingleFile.zip 不需要.net运行库 但是win7一样需要安装KB4457144更新
 
 # 功能简介
  - 自动选择最高码率下载
