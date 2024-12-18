@@ -1,0 +1,78 @@
+name: main
+
+on: 
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: '版本号'
+        required: true
+
+jobs:
+  package:
+    runs-on: windows-latest
+
+    env:
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Publish
+        run: |
+          dotnet publish BiliDownloader/ -o BiliDownloader/bin/Publish --configuration Release
+          dotnet publish BiliDownloader/ -o BiliDownloader/bin/PublishSingleFile -c Release --self-contained true -r win-x64  -p:PublishSingleFile=true
+
+      - name: Upload artifacts normal
+        uses: actions/upload-artifact@v3
+        with:
+          name: BiliDownloader
+          path: BiliDownloader/bin/Publish
+
+      - name: Upload artifacts single file
+        uses: actions/upload-artifact@v3
+        with:
+          name: BiliDownloader-SingleFile
+          path: BiliDownloader/bin/PublishSingleFile
+
+  deploy:
+    needs: package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artifacts normal
+        uses: actions/download-artifact@v3
+        with:
+          name: BiliDownloader
+          path: BiliDownloader
+
+      - name: Download artifacts single file
+        uses: actions/download-artifact@v3
+        with:
+          name: BiliDownloader-SingleFile
+          path: BiliDownloader-SingleFile
+
+      - name: Create package
+        run: | 
+          Compress-Archive -Path BiliDownloader/* -DestinationPath BiliDownloader.zip -Force
+          Compress-Archive -Path BiliDownloader-SingleFile/* -DestinationPath BiliDownloader-SingleFile.zip -Force
+        shell: pwsh
+
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.event.inputs.tags }}
+          body: |
+            - [更新日志](https://github.com/Harlan-H/BiliDownloader/blob/master/Changelog.md)
+          draft: false
+          prerelease: false
+          files: |
+              BiliDownloader.zip
+              BiliDownloader-SingleFile.zip
