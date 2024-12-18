@@ -6,14 +6,9 @@ using System.Threading.Tasks;
 
 namespace BiliDownloader.Core.Videos.Streams
 {
-    public class StreamManifest
+    public class StreamManifest(IReadOnlyList<IStreamInfo> streams)
     {
-        private readonly IReadOnlyList<IStreamInfo> streams;
-
-        public StreamManifest(IReadOnlyList<IStreamInfo> streams)
-        {
-            this.streams = streams;
-        }
+        private readonly IReadOnlyList<IStreamInfo> streams = streams;
 
         public IEnumerable<IAudioStreamInfo> GetAudioStreams() =>
             streams.OfType<IAudioStreamInfo>();

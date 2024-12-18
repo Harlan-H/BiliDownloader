@@ -11,17 +11,12 @@ using System.Threading.Tasks;
 
 namespace BiliDownloader.Services
 {
-    public class DownloadService : IDisposable
+    public class DownloadService(SettingsService settingsService) : IDisposable
     {
         private readonly BiliDownloaderClient biliDownloaderClient = new(Http.Client);
         private readonly SemaphoreSlim _semaphore = new(1, 1);
-        private readonly SettingsService settingsService;
+        private readonly SettingsService settingsService = settingsService;
         private int _concurrentDownloadCount;
-
-        public DownloadService(SettingsService settingsService)
-        {
-            this.settingsService = settingsService;
-        }
 
         private async Task EnsureThrottlingAsync(CancellationToken cancellationToken)
         {

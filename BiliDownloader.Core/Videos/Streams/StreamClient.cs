@@ -13,21 +13,13 @@ using System.Threading.Tasks;
 
 namespace BiliDownloader.Core.Videos.Streams
 {
-    public class StreamClient
+    public class StreamClient(HttpClient httpClient)
     {
-        private readonly StreamController streamController;
-        private readonly HttpClient httpClient;
-
-        public StreamClient(HttpClient httpClient)
-        {
-            streamController = new StreamController(httpClient);
-            this.httpClient = httpClient;
-        }
-
-
+        private readonly StreamController streamController = new StreamController(httpClient);
+        private readonly HttpClient httpClient = httpClient;
 
         private void PopulateStreamInfosAsync(
-            ICollection<IStreamInfo> streamInfos,
+            List<IStreamInfo> streamInfos,
             IEnumerable<IStreamInfoExtractor> streamInfoExtractors)
         {
             foreach (var streamInfoExtractor in streamInfoExtractors)
@@ -91,11 +83,7 @@ namespace BiliDownloader.Core.Videos.Streams
                                 .GetVideoOnlyStreams()
                                 .OrderByDescending(o => o.VideoQuality)
                                 .ThenByDescending(o => o.BandWidth)
-                                .FirstOrDefault();
-
-                if (videoInfo is null)
-                    throw new InvalidOperationException("没有任何视频数据");
-
+                                .FirstOrDefault() ?? throw new InvalidOperationException("没有任何视频数据");
                 {
 
                     long contentLength = videoInfo.FileSize.Bytes == 0
@@ -116,11 +104,7 @@ namespace BiliDownloader.Core.Videos.Streams
                                 .GetAudioOnlyStreams()
                                 .OrderByDescending(o => o.AudioQuality)
                                 .ThenByDescending(o => o.BandWidth)
-                                .FirstOrDefault();
-
-                if (audioInfo is null)
-                    throw new InvalidOperationException("没有任何音频数据");
-
+                                .FirstOrDefault() ?? throw new InvalidOperationException("没有任何音频数据");
                 {
                     long contentLength = audioInfo.FileSize.Bytes == 0
                         ? await httpClient.TryGetContentLengthAsync(audioInfo.Url, false, cancellationToken)

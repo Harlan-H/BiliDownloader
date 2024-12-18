@@ -23,12 +23,12 @@ jobs:
       - name: Install .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 9.0.x
 
       - name: Publish
         run: |
           dotnet publish BiliDownloader/ -o BiliDownloader/bin/Publish --configuration Release
-          dotnet publish BiliDownloader/ -o BiliDownloader/bin/PublishSingleFile -c Release --self-contained true -r win7-x64  -p:PublishSingleFile=true
+          dotnet publish BiliDownloader/ -o BiliDownloader/bin/PublishSingleFile -c Release --self-contained true -r win-x64  -p:PublishSingleFile=true
 
       - name: Upload artifacts normal
         if: ${{ github.event_name == 'push' && github.ref_type == 'tag' }}

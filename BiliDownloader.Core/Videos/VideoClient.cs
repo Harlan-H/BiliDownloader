@@ -14,18 +14,11 @@ using System.Threading.Tasks;
 
 namespace BiliDownloader.Core.Videos
 {
-    public class VideoClient
+    public class VideoClient(HttpClient httpClient)
     {
-        private readonly VideoController videoController;
-        public StreamClient Streams { get; }
-        public ClosedCaptionClient ClosedCaptions { get; }
-
-        public VideoClient(HttpClient httpClient)
-        {
-            videoController = new VideoController(httpClient);
-            Streams = new StreamClient(httpClient);
-            ClosedCaptions = new ClosedCaptionClient(httpClient);
-        }
+        private readonly VideoController videoController = new VideoController(httpClient);
+        public StreamClient Streams { get; } = new StreamClient(httpClient);
+        public ClosedCaptionClient ClosedCaptions { get; } = new ClosedCaptionClient(httpClient);
 
         public VideoClient() : this(new HttpClient())
         {

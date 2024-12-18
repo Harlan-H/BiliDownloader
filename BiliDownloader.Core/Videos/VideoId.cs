@@ -23,7 +23,7 @@ namespace BiliDownloader.Core.Videos
             if (!videoId.StartsWith("BV"))
                 return false;
 
-            return !Regex.IsMatch(videoId, @"[^0-9a-zA-Z]");
+            return !VideoRegex().IsMatch(videoId);
         }
 
         private static string? TryNormalize(string? videoIdOrUrl)
@@ -52,6 +52,9 @@ namespace BiliDownloader.Core.Videos
         public static implicit operator VideoId(string videoIdOrUrl) => Parse(videoIdOrUrl);
 
         public static implicit operator string(VideoId videoId) => videoId.ToString();
+
+        [GeneratedRegex(@"[^0-9a-zA-Z]")]
+        private static partial Regex VideoRegex();
     }
 
     public partial struct VideoId : IEquatable<VideoId>

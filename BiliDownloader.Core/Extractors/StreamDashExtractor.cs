@@ -22,10 +22,23 @@ namespace BiliDownloader.Core.Extractors
 
         public int? TryGetFileSize() => null;
 
+        //使用backupUrl的请求地址，baseUrl的地址可能回出现404的问题
         public string? TryGetUrl() => Memory.Cache(this, () =>
-             jsonElement
-             .GetPropertyOrNull("baseUrl")?
-             .GetStringOrNull()
+        {
+            var backUpUrlArr = jsonElement
+            .GetPropertyOrNull("backupUrl")?
+            .EnumerateArrayOrNull()?
+            .Select(i => i.GetStringOrNull())?
+            .ToArray();
+
+            if(backUpUrlArr is not null && backUpUrlArr.Any())
+            {
+                
+                int index = Random.Shared.Next(backUpUrlArr.Length);
+                return backUpUrlArr[index];
+            }
+            return null;
+         }
         );
 
         public int? TryGetQuality() => Memory.Cache(this, () =>

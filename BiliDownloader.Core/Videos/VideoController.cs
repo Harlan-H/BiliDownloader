@@ -8,12 +8,8 @@ using System.Threading.Tasks;
 
 namespace BiliDownloader.Core.Videos
 {
-    internal class VideoController : BaseController
+    internal class VideoController(HttpClient httpClient) : BaseController(httpClient)
     {
-        public VideoController(HttpClient httpClient) : base(httpClient)
-        {
-        }
-
         public async ValueTask<VideoPageExtractor> GetVideoPageAsync(
             VideoId videoid,
             CancellationToken cancellationToken)

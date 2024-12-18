@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 
 namespace BiliDownloader.ViewModels
 {
-    public partial class DownloadViewModel : PropertyChangedBase, IDisposable
+    public partial class DownloadViewModel(DownloadService downloadService, SoundsService soundsService) : PropertyChangedBase, IDisposable
     {
         private CancellationTokenSource? cancellationTokenSource;
-        private readonly DownloadService downloadService;
-        private readonly SoundsService soundsService;
+        private readonly DownloadService downloadService = downloadService;
+        private readonly SoundsService soundsService = soundsService;
 
         [DoNotNotify]
         public IPlaylist Playlist { get; set; } = default!;
@@ -33,12 +33,6 @@ namespace BiliDownloader.ViewModels
 
         public bool IsDownloading => Status == DownloadStatus.Downloaded;
         public string? FailReason { get; private set; } = string.Empty;
-
-        public DownloadViewModel(DownloadService downloadService,SoundsService soundsService)
-        {
-            this.downloadService = downloadService;
-            this.soundsService = soundsService;
-        }
 
         private DownloadRate DownloadRateFunc(long filesize)
         {

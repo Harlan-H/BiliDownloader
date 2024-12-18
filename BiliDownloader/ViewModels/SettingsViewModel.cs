@@ -4,19 +4,13 @@ using System.Collections.Generic;
 
 namespace BiliDownloader.ViewModels
 {
-    public class SettingsViewModel : DialogScreen
+    public class SettingsViewModel(SettingsService settingsService) : DialogScreen
     {
-        private readonly SettingsService settingsService;
+        private readonly SettingsService settingsService = settingsService;
 
-        public SettingsViewModel(SettingsService settingsService)
-        {
-            this.settingsService = settingsService;
-            SettingsServiceClone = (SettingsService)settingsService.Clone();
-        }
+        public SettingsService SettingsServiceClone { get; set; } = (SettingsService)settingsService.Clone();
 
-        public SettingsService SettingsServiceClone { get; set; }
-
-        public IReadOnlyList<string> AvailableFormats { get; set; } = new[] { "flv","mp4" };
+        public IReadOnlyList<string> AvailableFormats { get; set; } = ["flv","mp4"];
 
 
         public void OnCloseDialog()

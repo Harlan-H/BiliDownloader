@@ -4,7 +4,7 @@ namespace BiliDownloader.Utils
 {
     internal static class FileNameGenerator
     {
-        private static readonly char[] _trimChars = new[] { ' ', '.' }; 
+        private static readonly char[] _trimChars = [' ', '.']; 
         public static string GetFullFileName(string dir, string videoName, string videoPartName, string format)
         {
             var videoNameTmp = PathEx.EscapeFileName(videoName.Trim(_trimChars));

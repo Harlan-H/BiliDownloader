@@ -59,7 +59,6 @@ namespace BiliDownloader
             //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls13 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
 
             HttpClient.DefaultProxy = new WebProxy();
-            ServicePointManager.DefaultConnectionLimit = 40;
             await DisplayRootViewForAsync<MainWindowViewModel>();
         }
 

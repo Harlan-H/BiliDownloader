@@ -16,8 +16,8 @@ namespace BiliDownloader.Utils
             if (handler.SupportsAutomaticDecompression)
                 handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
-//             handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-//             handler.SslProtocols = SslProtocols.Tls12 | SslProtocols.Tls13 | SslProtocols.None;
+            //             handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+            //             handler.SslProtocols = SslProtocols.Tls12 | SslProtocols.Tls13 | SslProtocols.None;
             return handler;
         }
 
@@ -25,8 +25,10 @@ namespace BiliDownloader.Utils
 
         static Http()
         {
-            Client = new(GetHandler());
-            Client.Timeout = TimeSpan.FromSeconds(10);
+            Client = new(GetHandler())
+            {
+                Timeout = TimeSpan.FromSeconds(20)
+            };
             Client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36");
            // Client.DefaultRequestHeaders.Accept.ParseAdd("text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
         }

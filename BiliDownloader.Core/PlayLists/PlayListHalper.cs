@@ -41,12 +41,12 @@ namespace BiliDownloader.Core.Videos.Pages
         /// <param name="videoPageExtractor">主页数据</param>
         /// <param name="videoId">bvid</param>
         /// <returns>视频流信息</returns>
-        public static IList<IPlaylist> GetPlayLists(VideoPageExtractor videoPageExtractor,int aid, VideoId videoId)
+        public static IList<IPlaylist> GetPlayLists(VideoPageExtractor videoPageExtractor,long aid, VideoId videoId)
         {
             var pageExtractor = videoPageExtractor.TryGetPages();
             if (!pageExtractor.Any()) return Array.Empty<IPlaylist>();
 
-            IList<IPlaylist> pages = new List<IPlaylist>();
+            IList<IPlaylist> pages = [];
             foreach (var p in pageExtractor)
             {
                 var cid = p.TryGetCid() ?? 0;

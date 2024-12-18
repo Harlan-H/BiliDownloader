@@ -23,10 +23,10 @@ namespace BiliDownloader.Core.Extractors
 
         private JsonElement? TryGetOwner() => Memory.Cache(this, () => TryGetVideoData()?.GetPropertyOrNull("owner"));
 
-        public int? TryGetAid() => Memory.Cache(this, () =>
+        public long? TryGetAid() => Memory.Cache(this, () =>
             TryGetVideoData()?
             .GetPropertyOrNull("aid")?
-            .GetInt32OrNull()
+            .GetInt64OrNull()
         );
 
         public string? TryGetVideoTitle() => Memory.Cache(this, () =>

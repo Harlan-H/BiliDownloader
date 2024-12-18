@@ -8,12 +8,8 @@ using System.Threading.Tasks;
 
 namespace BiliDownloader.Core.Videos.Streams
 {
-    internal class StreamController : BaseController
+    internal class StreamController(HttpClient httpClient) : BaseController(httpClient)
     {
-        public StreamController(HttpClient httpClient) : base(httpClient)
-        {
-        }
-
         public async ValueTask<StreamInfoExtractor> GetManifestAsync(IPlaylist playlist, CancellationToken cancellationToken)
         {
             var raw = await SendHttpRequestAsync(playlist.Url, cancellationToken);

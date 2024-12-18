@@ -14,7 +14,7 @@
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanMinimize"
         d:DataContext="{d:DesignInstance local:MainWindowViewModel}" 
-        Height="700" Width="600">
+        Height="700" Width="610">
      
     <materialDesign:DialogHost
         CloseOnClickAway="False"
@@ -93,7 +93,7 @@
                     <ListView.View>
                         <GridView>
                             <GridViewColumn   Width="280"  DisplayMemberBinding="{Binding Title}"  Header="视频名称" />
-                            <GridViewColumn   Header="状态" Width="250" >
+                            <GridViewColumn   Header="状态" Width="230" >
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Grid Width="230">
@@ -160,7 +160,7 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn >
+                            <GridViewColumn  >
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel cal:Bind.ModelWithoutContext="{Binding}"

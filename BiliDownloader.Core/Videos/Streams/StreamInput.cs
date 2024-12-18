@@ -3,17 +3,11 @@ using System.IO;
 
 namespace BiliDownloader.Core.Videos.Streams
 {
-    public class StreamInput : IDisposable
+    public class StreamInput(IStreamInfo info, string filePath) : IDisposable
     {
-        public IStreamInfo Info { get; }
+        public IStreamInfo Info { get; } = info;
 
-        public string FilePath { get; }
-
-        public StreamInput(IStreamInfo info, string filePath)
-        {
-            Info = info;
-            FilePath = filePath;
-        }
+        public string FilePath { get; } = filePath;
 
         public void Dispose()
         {

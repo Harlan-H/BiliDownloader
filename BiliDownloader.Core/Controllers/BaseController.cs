@@ -32,6 +32,10 @@ namespace BiliDownloader.Core.Controllers
             )
         {
             using var request = new HttpRequestMessage(HttpMethod.Get, url);
+            if (!request.Headers.Contains("referer"))
+            {
+                request.Headers.Add("referer", "https://www.bilibili.com");
+            }
             return await SendHttpRequestAsync(request, cancellationToken);
         }
     }

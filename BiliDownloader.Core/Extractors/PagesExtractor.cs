@@ -14,10 +14,10 @@ namespace BiliDownloader.Core.Extractors
             this.jsonElement = jsonElement;
         }
 
-        public int? TryGetCid() => Memory.Cache(this, () =>
+        public long? TryGetCid() => Memory.Cache(this, () =>
             jsonElement
             .GetPropertyOrNull("cid")?
-            .GetInt32OrNull()
+            .GetInt64OrNull()
         );
 
         public int? TryGetIndex() => Memory.Cache(this, () =>

@@ -6,31 +6,22 @@ using System.Threading.Tasks;
 
 namespace BiliDownloader.Core.Videos.Streams
 {
-    public class AudioOnlyStreamInfo : IAudioStreamInfo
+    public class AudioOnlyStreamInfo(
+        string url,
+        int audioquality,
+        string audiocodec,
+        FileSize fileSize,
+        int bandWidth) : IAudioStreamInfo
     {
-        public string AudioCodec { get; }
+        public string AudioCodec { get; } = audiocodec;
 
-        public string Url { get; } 
+        public string Url { get; } = url;
 
-        public FileSize FileSize { get; private set; }
+        public FileSize FileSize { get; private set; } = fileSize;
 
-        public int BandWidth { get; }
+        public int BandWidth { get; } = bandWidth;
 
-        public int AudioQuality { get; }
-
-        public AudioOnlyStreamInfo(
-            string url,
-            int audioquality,
-            string audiocodec,
-            FileSize fileSize,
-            int bandWidth)
-        {
-            Url = url;
-            AudioQuality = audioquality;
-            AudioCodec = audiocodec;
-            FileSize = fileSize;
-            BandWidth = bandWidth;
-        }
+        public int AudioQuality { get; } = audioquality;
 
         public void UpdateFileSize(FileSize fileSize)
         {

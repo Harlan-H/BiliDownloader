@@ -2,17 +2,15 @@
 
 namespace BiliDownloader.Core.Videos.Streams
 {
-    public readonly partial struct FileSize
+    public readonly partial struct FileSize(long bytes)
     {
-        public long Bytes { get; }
+        public long Bytes { get; } = bytes;
 
         public double KiloBytes => (double)Bytes / (1 << 10);
 
         public double MegaBytes => (double)Bytes / (1 << 20);
 
         public double GigaBytes => (double)Bytes / (1 << 30);
-
-        public FileSize(long bytes) => Bytes = bytes;
 
         private string GetLargestWholeNumberSymbol()
         {

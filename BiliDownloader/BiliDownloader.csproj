@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net9.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
 	<UseWindowsForms>true</UseWindowsForms>
     
@@ -16,11 +16,11 @@
     
     <Authors>Harlan</Authors>
     
-    <FileVersion>1.0.7</FileVersion>
+    <FileVersion>1.0.8</FileVersion>
     
-    <AssemblyVersion>1.0.7</AssemblyVersion>
+    <AssemblyVersion>1.0.8</AssemblyVersion>
     
-    <Version>1.0.7</Version>
+    <Version>1.0.8</Version>
   </PropertyGroup>
 
 

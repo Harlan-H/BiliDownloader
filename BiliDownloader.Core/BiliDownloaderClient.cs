@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BiliDownloader.Core
 {
-    public class BiliDownloaderClient
+    public class BiliDownloaderClient(HttpClient httpClient)
     {
 #if DEBUG
         private const string FFmpegCliFilePath = @"F:\源代码\库\ffmpeg-4.3.1-2020-11-19-full_build-shared\bin\ffmpeg.exe";
@@ -19,15 +19,7 @@ namespace BiliDownloader.Core
         private const string FFmpegCliFilePath = "./ffmpeg.exe";
 #endif
 
-        public VideoClient Videos { get; }
-
-        //  public LiveClient Lives { get; }
-
-        public BiliDownloaderClient(HttpClient httpClient)
-        {
-            Videos = new VideoClient(httpClient);
-       //     Lives = new LiveClient(httpClient);
-        }
+        public VideoClient Videos { get; } = new VideoClient(httpClient);
 
         public BiliDownloaderClient() : this(Http.Client)
         {

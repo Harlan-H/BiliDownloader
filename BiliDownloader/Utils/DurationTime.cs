@@ -6,15 +6,10 @@ using System.Threading.Tasks;
 
 namespace BiliDownloader.Utils
 {
-    public class DurationTime
+    public class DurationTime(long filesize)
     {
         private long LastBytes { get; set; }
-        private readonly long Filesize;
-
-        public DurationTime(long filesize)
-        {
-            Filesize = filesize;
-        }
+        private readonly long Filesize = filesize;
 
         private double Next(long currentpos)
         {

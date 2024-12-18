@@ -6,15 +6,10 @@ using System.Threading.Tasks;
 
 namespace BiliDownloader.Core.Videos.Streams
 {
-    public class StreamInfo : IStreamInfo
+    public class StreamInfo(string url, FileSize fileSize) : IStreamInfo
     {
-        public string Url { get; }
+        public string Url { get; } = url;
 
-        public FileSize FileSize { get; }
-        public StreamInfo(string url,FileSize fileSize)
-        {
-            Url = url;
-            FileSize = fileSize;
-        }
+        public FileSize FileSize { get; } = fileSize;
     }
 }

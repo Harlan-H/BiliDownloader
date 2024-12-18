@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace BiliDownloader.Core.Utils
 {
-    internal class SegmentedHttpStream : Stream
+    internal class SegmentedHttpStream(HttpClient httpClient, string url, long filesize) : Stream
     {
-        private readonly HttpClient httpClient;
-        private readonly string url;
+        private readonly HttpClient httpClient = httpClient;
+        private readonly string url = url;
 
         private Stream? _segmentStream;
         private long _actualPosition;
@@ -20,16 +20,9 @@ namespace BiliDownloader.Core.Utils
 
         public override bool CanWrite => false;
 
-        public override long Length { get; }
+        public override long Length { get; } = filesize;
 
         public override long Position { get; set; }
-
-        public SegmentedHttpStream(HttpClient httpClient, string url, long filesize)
-        {
-            this.httpClient = httpClient;
-            this.url = url;
-            Length = filesize;
-        }
 
         private void ResetSegmentStream()
         {

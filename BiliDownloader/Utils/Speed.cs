@@ -2,16 +2,14 @@
 
 namespace BiliDownloader.Services
 {
-    public partial class Speed
+    public partial class Speed(long bytes)
     {
         private long LastBytes;
-        public long Bytes { get; private set; }
+        public long Bytes { get; private set; } = bytes;
 
         public double KiloBytes => Bytes / 1024.0;
 
         public double MegaBytes => Bytes / 1048576.0;
-
-        public Speed(long bytes) => Bytes = bytes;
 
         public Speed() : this(0)
         {

@@ -14,22 +14,15 @@ using System.Windows;
 
 namespace BiliDownloader.ViewModels
 {
-    public class MainWindowViewModel : Screen
+    public class MainWindowViewModel(QueryService queryService, SettingsService settingsService) : Screen
     {
-        private readonly QueryService queryService;
-        private readonly SettingsService settingsService;
+        private readonly QueryService queryService = queryService;
+        private readonly SettingsService settingsService = settingsService;
 
         public ISnackbarMessageQueue Snackbar { get; } = new SnackbarMessageQueue(TimeSpan.FromSeconds(5));
-        public BindableCollection<DownloadViewModel> Downloads { get; } = new();
+        public BindableCollection<DownloadViewModel> Downloads { get; } = [];
         public string? RequestUrl { get; set; }
         public bool IsBusy { get; private set; }
-
-        public MainWindowViewModel(QueryService queryService, SettingsService settingsService)
-        {
-            this.queryService = queryService;
-            this.settingsService = settingsService;
-        }
-
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {

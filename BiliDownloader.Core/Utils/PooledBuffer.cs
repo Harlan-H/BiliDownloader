@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace BiliDownloader.Core.Utils
 {
-    internal readonly struct PooledBuffer<T> : IDisposable
+    internal readonly struct PooledBuffer<T>(int minlength) : IDisposable
     {
-        public T[] Array { get; }
-        public PooledBuffer(int minlength) => Array = ArrayPool<T>.Shared.Rent(minlength);
+        public T[] Array { get; } = ArrayPool<T>.Shared.Rent(minlength);
+
         public void Dispose() => ArrayPool<T>.Shared.Return(Array);
     }
 
